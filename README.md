@@ -1,3 +1,45 @@
+# Modifications
+This fork is for personal development of PX4 for some multi-agent experimentation. 
+Main changes are the addition of two examples, `offboard_control_multi_boat.cpp` and `offboard_control_multi_boat.cpp`.
+I also added the world file. 
+
+To install the worlds and models, copy contents from `worlds_and_models` to
+`/px4/PX4-Autopilot/Tools/sitl_gazebo/worlds` or `/px4/PX4-Autopilot/Tools/sitl_gazebo/models` 
+
+To run (make sure installed correctly, see details at end).
+`source ./install/setup.bash` 
+
+Terminal 1: 
+```
+cd ~/px4/PX4-Autopilot/
+
+git submodule update --init --recursive
+DONT_RUN=1 make px4_sitl_rtps gazebo
+./Tools/gazebo_sitl_multiple_run.sh -n 2 -s plane:1,boat:1 -t px4_sitl_rtps -w boat_2
+```
+
+Terminal 2: (px4_ros_com_ros2 is the colcon workspace), with src/px4_ros_com and src/px4_msgs
+```
+cd ~/px4_ros_com_ros2
+source ./install/setup.bash
+micrortps_agent -t UDP -r 2020 -s 2019 -n vhcl0 & micrortps_agent -t UDP -r 2022 -s 2021 -n vhcl1 &
+```
+
+Terminal 3:
+```
+cd ~/px4_ros_com_ros2
+source ./install/setup.bash
+ros2 run px4_ros_com offboard_control_multi_boat 
+```
+Or to control the plane
+Terminal 4:
+```
+cd ~/px4_ros_com_ros2
+source ./install/setup.bash
+ros2 run px4_ros_com offboard_control_multi_plane 
+```
+
+
 # PX4-ROS2 bridge
 
 [![GitHub license](https://img.shields.io/github/license/PX4/px4_ros_com.svg)](https://github.com/PX4/px4_ros_com/blob/master/LICENSE) [![GitHub (pre-)release](https://img.shields.io/github/release-pre/PX4/px4_ros_com.svg)](https://github.com/PX4/px4_ros_com/releases/tag/beta) [![DOI](https://zenodo.org/badge/142936318.svg)](https://zenodo.org/badge/latestdoi/142936318) [![Build and Test package](https://github.com/PX4/px4_ros_com/workflows/Build%20and%20Test%20package/badge.svg?branch=master)](https://github.com/PX4/px4_ros_com/actions)
