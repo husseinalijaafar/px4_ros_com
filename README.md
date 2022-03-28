@@ -25,6 +25,9 @@ source ./install/setup.bash
 micrortps_agent -t UDP -r 2020 -s 2019 -n vhcl0 & micrortps_agent -t UDP -r 2022 -s 2021 -n vhcl1 &
 ```
 
+**Note**, when closing this terminal, it is necessary to do `killall micrortps_*` to kill all processing which may remain.
+If not, the some of the UDP ports (2020, 2019, 2021, 2022) will remain occupied. 
+
 Terminal 3:
 ```
 cd ~/px4_ros_com_ros2
